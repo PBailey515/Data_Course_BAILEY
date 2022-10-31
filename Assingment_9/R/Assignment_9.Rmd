@@ -1,0 +1,145 @@
+---
+title: "Assignment_9"
+author: "Peyton Bailey"
+date: "2022-10-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,warning = FALSE,message = FALSE)
+```
+
+## R Markdown
+# For this report we will be looking at grad school admissions
+This will give a glimpse of the data
+```{r}
+library(tidyverse)
+library(skimr)
+df <- read_csv("../Data/GradSchool_Admissions.csv")
+ df1 <-  df %>% mutate(enrolled=case_when(admit == 1 ~ TRUE ,TRUE~FALSE))
+
+ skim(df) 
+ 
+ 
+```
+
+
+Here is a data table you can filter the categories using a slider to further explore the data set
+
+
+
+
+```{r}
+ 
+ library(DT)
+ 
+ 
+ datatable(df1, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+
+___
+
+## Plots 
+
+
+
+#### GPA vs GRE
+
+
+
+
+
+```{r,fig.align='center'}
+plot1 <- df1 %>% ggplot(aes(x=gpa,y=gre,color=enrolled))+  geom_smooth(method = "lm",se=FALSE) 
+
+library(plotly)
+ggplotly(plot1)
+```
+
+#### GPA vs GRE by rank in the class
+
+
+```{r,fig.align='center'}
+plot2 <- df1 %>% ggplot(aes(y=gpa,x=gre,color=enrolled))+  geom_smooth(method = "lm", se = FALSE) +facet_wrap(~rank)
+
+ggplotly(plot2)
+
+
+```
+
+
+##### This shows that those ranked 2nd got in the most
+
+```{r}
+plot3 <- df1 %>% ggplot(aes(x=rank,y=gpa))+ geom_point()+ facet_wrap(~enrolled)
+
+ggplotly(plot3)
+```
+
+
+
+
+
+
+
+## models
+
+
+model 1
+```{r}
+
+library(easystats)
+library(kableExtra)
+mod1 <- glm(df1,formula = enrolled ~ gpa * gre + rank, family = "binomial")
+performance(mod1)
+
+formula(mod1)
+
+broom::tidy(mod1) %>% kable() %>% kable_classic(lightable_options = 'hover') %>% kable_material_dark()
+```
+
+
+
+model 2
+
+
+```{r}
+mod2 <- glm(df1,formula = enrolled ~ gpa * gre * rank, family = "binomial")
+
+model_performance(mod2)
+formula(mod2)
+broom::tidy(mod2) %>% kable() %>% kable_classic(lightable_options = 'hover') %>% kable_material_dark()
+
+```
+
+comparing the models performance
+
+```{r}
+compare_performance(mod1,mod2,rank=TRUE)
+```
+
+## Predictions
+Percent chance of getting enrolled based on GRE
+```{r}
+
+library(modelr)
+
+modeldf <- add_predictions(df1,mod1,type="response") 
+
+plot4 <-  modeldf %>% ggplot(aes(x=pred,y=gre))+ geom_smooth(se=FALSE)
+
+ggplotly(plot4)
+
+```
+
+
+
+
+Percent chance of getting enrolled based on GPA
+
+```{r}
+plot5 <- modeldf %>% ggplot(aes(y=gpa,x=pred)) + geom_smooth(se=FALSE)
+ggplotly(plot5)
+```
+***To access the link open in web browser***
+[If your feeling down on your chances click HERE](file:///Users/Owner/Desktop/Data_Course_BAILEY/grad_school_motivation/Docs/index.html)
