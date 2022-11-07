@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" creator="gpx.py -- https://github.com/tkrajina/gpxpy">
+  <trk>
+    <name>First 
+Speed Run</name>
+    <trkseg>
+      <trkpt lat="40.28004265520137" lon="-111.70171825584424">
+        <ele>0.0025634765625</ele>
+        <time>2021-09-01T03:09:21.998000Z</time>
+      </trkpt>
+      <trkpt lat="40.28004181640774" lon="-111.70159073662398">
+        <ele>0.0528564453125</ele>
+        <time>2021-09-01T03:09:26.998000Z</time>
+      </trkpt>
+      <trkpt lat="40.28004545558884" lon="-111.70146819850612">
+        <ele>0.002685546875</ele>
+        <time>2021-09-01T03:09:31.999000Z</time>
+      </trkpt>
+      <trkpt lat="40.28004319690052" lon="-111.70134290765576">
+        <ele>0.01318359375</ele>
+        <time>2021-09-01T03:09:36.999000Z</time>
+      </trkpt>
+      <trkpt lat="40.27994821714964" lon="-111.70131013294929">
+        <ele>0.055419921875</ele>
+        <time>2021-09-01T03:09:45.999000Z</time>
+      </trkpt>
+      <trkpt lat="40.27988416078543" lon="-111.70141349618805">
+        <time>2021-09-01T03:09:51Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
