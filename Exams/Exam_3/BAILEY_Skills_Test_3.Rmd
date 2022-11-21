@@ -1,0 +1,94 @@
+---
+title: "BAILEY_Skills_Test"
+author: "Peyton Bailey"
+date: "2022-11-21"
+output: html_document
+---
+
+```{r setup, include=FALSE,warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+# Task 1:Load and clean FacultySalaries_1995.csv file and Re-create the graph below…
+# View of the clean data
+```{r}
+library(tidyverse)
+library(janitor)
+library(stringr)
+library(ggpubr)
+library(broom)
+library(AICcmodavg)
+library(knitr)
+library(DT)
+df<- read_csv("Data/FacultySalaries_1995.csv")%>% clean_names() %>%   
+  pivot_longer(c(ends_with("salary")), names_to = "rank", values_to = "salary",names_prefix = "avg_") %>%
+  pivot_longer(c(ends_with("comp")), names_to = "comp_type", values_to = "comp_amt") %>%
+  pivot_longer(c(num_full_profs,num_assoc_profs,num_assist_profs), names_to = "faculty_type", values_to = "faculty_count") 
+df <- df %>% filter(!df$tier == "VIIB")
+
+datatable(df, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T))
+
+
+```
+#Graph 
+
+```{r}
+df %>%
+  ggplot(aes(x=rank, y=salary,fill=rank))+
+  geom_boxplot()+
+  facet_wrap(~tier)+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+
+## TASK 2: ANOVA
+```{r}
+twoway<-aov(salary~state+rank+tier, data = df)
+summary(twoway)
+
+```
+
+
+
+
+##TASK 3 
+
+```{r}
+df2 <- read_csv("Data/Juniper_Oils.csv")  %>% pivot_longer(c("alpha-pinene","para-cymene","alpha-terpineol","cedr-9-ene","alpha-cedrene","beta-cedrene","cis-thujopsene","alpha-himachalene","beta-chamigrene","cuparene","compound 1","alpha-chamigrene","widdrol","cedrol","beta-acorenol","alpha-acorenol","gamma-eudesmol","beta-eudesmol","alpha-eudesmol","cedr-8-en-13-ol","cedr-8-en-15-ol","compound 2","thujopsenal"),names_to = "chem_comp",values_to = "concentration") %>% clean_names()
+
+head(df2,n=5)
+
+
+```
+
+
+##Task 4: Graph 
+
+```{r}
+df2 %>% ggplot(aes(x=years_since_burn,y=concentration)) + geom_smooth() + facet_wrap(~chem_comp,scales = "free_y")
+```
+
+##5: generalized linear model 
+
+```{r}
+library(broom)
+
+mod1 <- glm(data=df2,formula =  concentration ~  years_since_burn+ chem_comp)
+
+df3 <- tidy(mod1,conf.level = TRUE)
+
+df4<- df3 %>% filter(df3$p.value<.05) 
+
+kable(x = df4,align = "c",caption ="Statistically significant compounds",col.names =c("compound", "estimate" ,"std.error","statistic", "p.value"))
+
+
+
+
+```
+
+
+
+
