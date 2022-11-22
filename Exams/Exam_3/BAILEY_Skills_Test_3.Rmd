@@ -30,6 +30,8 @@ df <- df %>% filter(!df$tier == "VIIB")
 datatable(df, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T))
 
 
+
+
 ```
 #Graph 
 
@@ -39,7 +41,7 @@ df %>%
   geom_boxplot()+
   facet_wrap(~tier)+
   theme_minimal()+
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.x = element_text(angle = 90))  
 ```
 
 
@@ -75,11 +77,11 @@ df2 %>% ggplot(aes(x=years_since_burn,y=concentration)) + geom_smooth() + facet_
 
 ```{r}
 library(broom)
-
-mod1 <- glm(data=df2,formula =  concentration ~  years_since_burn+ chem_comp)
+library(stringr)
+library(magrittr)
+mod1 <- glm(data=df2,formula =  concentration ~  years_since_burn + chem_comp)
 
 df3 <- tidy(mod1,conf.level = TRUE)
-
 df4<- df3 %>% filter(df3$p.value<.05) 
 
 kable(x = df4,align = "c",caption ="Statistically significant compounds",col.names =c("compound", "estimate" ,"std.error","statistic", "p.value"))
