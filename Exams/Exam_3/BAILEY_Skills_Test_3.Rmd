@@ -33,7 +33,7 @@ datatable(df, rownames = FALSE, filter="top", options = list(pageLength = 5, scr
 
 
 ```
-# Graph 
+## Graph 
 
 ```{r}
 df %>%
