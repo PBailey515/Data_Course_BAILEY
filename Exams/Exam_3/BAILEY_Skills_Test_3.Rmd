@@ -33,7 +33,7 @@ datatable(df, rownames = FALSE, filter="top", options = list(pageLength = 5, scr
 
 
 ```
-#Graph 
+# Graph 
 
 ```{r}
 df %>%
@@ -56,24 +56,24 @@ summary(twoway)
 
 
 
-##TASK 3 
+## TASK 3 
 
 ```{r}
 df2 <- read_csv("Data/Juniper_Oils.csv")  %>% pivot_longer(c("alpha-pinene","para-cymene","alpha-terpineol","cedr-9-ene","alpha-cedrene","beta-cedrene","cis-thujopsene","alpha-himachalene","beta-chamigrene","cuparene","compound 1","alpha-chamigrene","widdrol","cedrol","beta-acorenol","alpha-acorenol","gamma-eudesmol","beta-eudesmol","alpha-eudesmol","cedr-8-en-13-ol","cedr-8-en-15-ol","compound 2","thujopsenal"),names_to = "chem_comp",values_to = "concentration") %>% clean_names()
 
-head(df2,n=5)
+kable(x = df2,digits = 10,align = "c",caption = "Clean Data Frame")
 
 
 ```
 
 
-##Task 4: Graph 
+## Task 4: Graph 
 
 ```{r}
 df2 %>% ggplot(aes(x=years_since_burn,y=concentration)) + geom_smooth() + facet_wrap(~chem_comp,scales = "free_y")
 ```
 
-##5: generalized linear model 
+## Task 5: generalized linear model 
 
 ```{r}
 library(broom)
@@ -84,7 +84,10 @@ mod1 <- glm(data=df2,formula =  concentration ~  years_since_burn + chem_comp)
 df3 <- tidy(mod1,conf.level = TRUE)
 df4<- df3 %>% filter(df3$p.value<.05) 
 
-kable(x = df4,align = "c",caption ="Statistically significant compounds",col.names =c("compound", "estimate" ,"std.error","statistic", "p.value"))
+df5 <- df4 %>% 
+transform(term=str_replace(term,"chem_comp",""))
+
+kable(x = df5,align = "c",caption ="Statistically significant compounds",col.names =c("compound", "estimate" ,"std.error","statistic", "p.value"))
 
 
 
