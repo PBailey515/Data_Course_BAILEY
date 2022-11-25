@@ -61,7 +61,7 @@ summary(twoway)
 ```{r}
 df2 <- read_csv("Data/Juniper_Oils.csv")  %>% pivot_longer(c("alpha-pinene","para-cymene","alpha-terpineol","cedr-9-ene","alpha-cedrene","beta-cedrene","cis-thujopsene","alpha-himachalene","beta-chamigrene","cuparene","compound 1","alpha-chamigrene","widdrol","cedrol","beta-acorenol","alpha-acorenol","gamma-eudesmol","beta-eudesmol","alpha-eudesmol","cedr-8-en-13-ol","cedr-8-en-15-ol","compound 2","thujopsenal"),names_to = "chem_comp",values_to = "concentration") %>% clean_names()
 
-kable(x = df2,digits = 10,align = "c",caption = "Clean Data Frame")
+glimpse(df2)
 
 
 ```
